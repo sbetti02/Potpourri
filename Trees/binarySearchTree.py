@@ -1,4 +1,4 @@
-
+from collections import deque
 
 class BinarySearchTree(object):
     """Basic representation of a Binary Tree for practicing tree rotations"""
@@ -14,8 +14,10 @@ class BinarySearchTree(object):
             Check to ensure key is unique
             Return the inserted node
             Returns None if key cannot be inserted
-            TODO: check if key is numeric value
         """
+        if not isinstance(key, (int, float, long)):
+            print "Cannot insert", key
+            return
         if not self.root:
             self.root = Node(key)
             return self.root
@@ -197,23 +199,23 @@ class BinarySearchTree(object):
             print_list.append('x')
         print (' ').join(print_list)
 
-
     def print_tree(self):
         """ 
             Print the levels of a tree space delimited, printing 'x' where values
             do not appear on the tree.
             *print_list* contains the list we want to print out
-            *to_explore* contains all nodes going to explore, stored as [(node, pos_in_arr, lev),...,]
-            TODO: Replace with duque instance
+            *to_explore* contains all nodes going to explore, stored as 
+            [(node, pos_in_arr, lev),...,] in a double-ended queue (deque)
         """
         if not self.root:
             return
-        to_explore = [(self.root, 0, 0)]
+        to_explore = deque()
+        to_explore.append((self.root, 0, 0))
         print_list = []
         level = -1
 
         while to_explore:
-            curr_node, arr_pos, curr_level = to_explore.pop(0) # optimized with queue?
+            curr_node, arr_pos, curr_level = to_explore.popleft() # optimized with queue
             if curr_level == level:
                 for i in xrange(len(print_list), arr_pos):
                     print_list.append('x')
@@ -229,7 +231,7 @@ class BinarySearchTree(object):
             if curr_node.right:
                 to_explore.append((curr_node.right, (arr_pos*2)+1, curr_level+1))
         self._print_tree_level(print_list, level)
-        
+
     def preorder_traversal_r(self):
         """Recursively return list with exploring tree in manner of self, left child, right child"""
         return self._preorder_traversal_r_helper(self.root)
@@ -274,7 +276,6 @@ class Node(object):
         Representation of a node on a tree containing a value and left/right pointers
         to start, may later include more information if incorporated into an
         augmented tree
-        TODO: create way to create node object from function
     """
 
     def __init__(self, value):
@@ -321,6 +322,8 @@ def main():
     T.print_tree()
     for i in range(5):
         T.insert_node(i)
+    T.print_tree()
+    T.insert_node("asdf")
     T.print_tree()
 
 if __name__ == "__main__":
