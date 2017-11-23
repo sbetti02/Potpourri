@@ -1,12 +1,12 @@
 from collections import deque
 
-class BinarySearchTree(object):
+class BST(object):
     """Basic representation of a Binary Tree for practicing tree rotations"""
 
     def __init__(self):
         """Initialize tree with NULL root node"""
         self.root = None
-
+        self.node_class = Node
 
     def insert_node(self, key):
         """
@@ -17,9 +17,9 @@ class BinarySearchTree(object):
         """
         if not isinstance(key, (int, float, long)):
             print "Cannot insert", key
-            return
+            return None
         if not self.root:
-            self.root = Node(key)
+            self.root = self.node_class(key)
             return self.root
 
         prev_node = None
@@ -32,7 +32,7 @@ class BinarySearchTree(object):
                 curr_node = curr_node.right
             else:
                 curr_node = curr_node.left
-        inserting = Node(key)
+        inserting = self.node_class(key)
         if key > prev_node.key:
             prev_node.right = inserting
         else:
@@ -165,7 +165,6 @@ class BinarySearchTree(object):
     def delete_node(self, key):
         """Delete node with value *key*"""
         node, parent = self._find_node_and_parent(key)
-        print "\ndeleting", key
         if not node:
             return
         if not parent: # deleting root node
@@ -277,6 +276,9 @@ class Node(object):
         to start, may later include more information if incorporated into an
         augmented tree
     """
+    key = None
+    left = None
+    right = None
 
     def __init__(self, value):
         """
@@ -284,11 +286,9 @@ class Node(object):
             Update to augment node for more metadata in tree.
         """
         self.key = value
-        self.left = None
-        self.right = None
 
 def main():
-    T = BinarySearchTree()
+    T = BST()
     T.insert_node(5)
     T.insert_node(6)
     T.insert_node(3)
