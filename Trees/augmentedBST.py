@@ -1,7 +1,6 @@
 from binarySearchTree import BST
 from binarySearchTree import Node
 
-
 class AugmentedBST(BST):
     def __init__(self):
         self.root = None
@@ -161,34 +160,6 @@ class AugmentedBST(BST):
         self._decrement_subtree_counts_to_node(parent)
         return
 
-
-    # def delete_node(self, key):
-    #     """Delete node with value *key*.  Maintain subtree counts appropriately"""
-    #     node, parent = self._find_node_and_parent(key)
-    #     if not node:
-    #         return
-    #     if not parent: # deleting root node
-    #         if node.left:
-    #             self.rotate_root_right()
-    #         elif node.right:
-    #             self.rotate_root_left()
-    #         else:
-    #             self.root = None
-    #             return
-    #         parent = self.root
-    #     if not node.left or not node.right:
-    #         self._delete_node_without_both_children(node, parent)
-    #     else:
-    #         min_right, min_right_parent = self._find_min_using_parent(node.right, node)
-    #         node.key = min_right.key
-    #         self._delete_node_without_both_children(min_right, min_right_parent)
-    #     return
-
-
-            
-
-
-
 class AugmentedNode(Node):
     """
         Representation of a node on a tree containing a value and left/right pointers
@@ -206,11 +177,11 @@ class AugmentedNode(Node):
 
     def increment_sub_tree(self,val=1):
         """Increment the number of sub nodes by *val*"""
-        self.num_sub_nodes += 1
+        self.num_sub_nodes += val
 
     def decrement_sub_tree(self, val=1):
         """Decrement the number of sub nodes by *val*"""
-        self.num_sub_nodes -= 1
+        self.num_sub_nodes -= val
 
 def test_subtree_counts(node):
     if not node:
@@ -224,7 +195,7 @@ def test_subtree_counts(node):
         return node.num_sub_nodes == node.right.num_sub_nodes+1 and \
                test_subtree_counts(node.right)
     return node.num_sub_nodes == node.left.num_sub_nodes + node.right.num_sub_nodes + 1 and \
-           test_subtree_counts(node.right) and test_subtree_counts(node.left)
+           test_subtree_counts(node.left) and test_subtree_counts(node.right)
 
 def main():
     T = AugmentedBST()
@@ -240,10 +211,15 @@ def main():
     print T.inorder_traversal_r()
     print T.preorder_traversal_r()
     print T.postorder_traversal_r()
-    T.rotate_right(3)
-    T.print_tree()
+    print "Subtree counts working...", test_subtree_counts(T.root)
+    T.rotate_right(5)
+    print "Subtree counts working...", test_subtree_counts(T.root)
     T.rotate_left(1)
-    print "..."
+    print "Subtree counts working...", test_subtree_counts(T.root)
+    T.print_tree()
+    T.rotate_root_left()
+    print "Subtree counts working...", test_subtree_counts(T.root)
+    T.print_tree()
     T.print_tree()
     T.insert_node(8.3)
     T.print_tree()
@@ -251,7 +227,7 @@ def main():
     T.print_tree()
     T.delete_node(8)
     T.print_tree()
-    print "Subtree counts working...", test_subtree_counts(T.root)
+    #print "Subtree counts working...", test_subtree_counts(T.root)
     #print T.find_node(6).num_sub_nodes
 
 
