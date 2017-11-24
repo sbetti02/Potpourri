@@ -2,11 +2,17 @@ from collections import deque
 
 class BST(object):
     """Basic representation of a Binary Tree for practicing tree rotations"""
+    root = None
 
     def __init__(self):
         """Initialize tree with NULL root node"""
-        self.root = None
+        #self.root = None
         self.node_class = Node
+
+    def bulk_insert(self, key_list):
+        """Insert a list of keys into BST"""
+        for key in key_list:
+            self.insert_node(key)
 
     def insert_node(self, key):
         """
