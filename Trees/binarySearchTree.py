@@ -237,6 +237,24 @@ class BST(object):
                 to_explore.append((curr_node.right, (arr_pos*2)+1, curr_level+1))
         self._print_tree_level(print_list, level)
 
+    def nodes_on_path_to_key(self, key):
+        """
+            Return a list of the nodes on the path to the node specified by *key* or None
+            if the node does not exist
+        """
+        node_list = []
+        node = self.root
+        while node and node.key != key:
+            node_list.append(node)
+            if node.key > key:
+                node = node.left
+            else:
+                node = node.right
+        if not node:
+            return None
+        node_list.append(node)
+        return node_list
+
     def preorder_traversal_r(self):
         """Recursively return list with exploring tree in manner of self, left child, right child"""
         return self._preorder_traversal_r_helper(self.root)
