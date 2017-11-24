@@ -3,8 +3,8 @@ from binarySearchTree import Node
 
 class AugmentedBST(BST):
     def __init__(self):
-        self.root = None
-        self.node_class = AugmentedNode # Current implementation to allow insert to dynamically update class
+        """Initialize a node_class, used in the current implementation of insert"""
+        self.node_class = AugmentedNode
 
     def insert_node(self, key):
         """
