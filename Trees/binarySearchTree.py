@@ -6,7 +6,6 @@ class BST(object):
 
     def __init__(self):
         """Initialize tree with NULL root node"""
-        #self.root = None
         self.node_class = Node
 
     def bulk_insert(self, key_list):
@@ -255,6 +254,21 @@ class BST(object):
         node_list.append(node)
         return node_list
 
+    def preorder_traversal_s(self):
+        """Preorder traverse the tree through use of a stack instead of recursively"""
+        if not self.root:
+            return []
+        stack = [self.root]
+        traversed = []
+        while stack:
+            curr_node = stack.pop()
+            traversed.append(curr_node.key)
+            if curr_node.right:
+                stack.append(curr_node.right)
+            if curr_node.left:
+                stack.append(curr_node.left)
+        return traversed
+
     def preorder_traversal_r(self):
         """Recursively return list with exploring tree in manner of self, left child, right child"""
         return self._preorder_traversal_r_helper(self.root)
@@ -268,6 +282,28 @@ class BST(object):
         preorder_traversed.extend(self._preorder_traversal_r_helper(curr_node.right))
         return preorder_traversed
 
+    def inorder_traversal_s(self):
+        """Simulate recursive inorder traversal using a stack"""
+        if not self.root:
+            return []
+        stack = [self.root]
+        traversed = []
+        already_processed = set()
+        while stack:
+            curr_node = stack[-1]
+            if curr_node.right and curr_node.right.key not in already_processed:
+                already_processed.add(curr_node.right.key)
+                curr_node = stack.pop()
+                stack.append(curr_node.right)
+                stack.append(curr_node)
+            if curr_node.left and curr_node.left.key not in already_processed:
+                stack.append(curr_node.left)
+            else:
+                popped = stack.pop()
+                already_processed.add(popped.key)
+                traversed.append(popped.key)
+        return traversed
+
     def inorder_traversal_r(self):
         """Recursively return list with exploring left child, then self, then right child"""
         return self._inorder_traversal_r_helper(self.root)
@@ -280,6 +316,28 @@ class BST(object):
         ordered_list.append(curr_node.key)
         ordered_list.extend(self._inorder_traversal_r_helper(curr_node.right))
         return ordered_list
+
+    def postorder_traversal_s(self):
+        """Simulate recursive inorder traversal using a stack"""
+        if not self.root:
+            return []
+        processed = set()
+        traversed = []
+        stack = [self.root]
+        while stack:
+            curr_node = stack[-1]
+            append_node = True
+            if curr_node.right and curr_node.right.key not in processed:
+                stack.append(curr_node.right)
+                processed.add(curr_node.right.key)
+                append_node = False
+            if curr_node.left and curr_node.left.key not in processed:
+                stack.append(curr_node.left)
+                processed.add(curr_node.left.key)
+                append_node = False
+            if append_node:
+                traversed.append(stack.pop().key)
+        return traversed
 
     def postorder_traversal_r(self):
         """Recursively return list with exploring left child, right child, then self"""
@@ -323,8 +381,11 @@ def main():
     T.insert_node(4.5)
     T.print_tree()
     print T.inorder_traversal_r()
+    print T.inorder_traversal_s()
     print T.preorder_traversal_r()
+    print T.preorder_traversal_s()
     print T.postorder_traversal_r()
+    print T.postorder_traversal_s()
     T.rotate_right(3)
     T.print_tree()
     T.insert_node(8.3)
