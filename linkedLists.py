@@ -61,13 +61,93 @@ class LinkedList(object):
 			node = node.next
 		print ""
 
+	def reverse(self):
+		"""Reverse the contents of the linked list"""
+		if not self.root:
+			return
+		prev = None
+		curr_node = self.root
+		while curr_node:
+			self.print_list()
+			next = curr_node.next
+			curr_node.next = prev
+			prev = curr_node
+			curr_node = next
+		self.root = prev
+
+
+class DoublyLinkedList(LinkedList):
+	"""Basic implementation of a doubly linked list"""
+
+	def append_node(self, key):
+		"""Append a node to the end of the list"""
+		new_node = DoublyLinkedNode(key)
+		if not self.root:
+			self.root = new_node
+			return
+		curr = self.root
+		prev = None
+		while curr:
+			prev = curr
+			curr = curr.next
+		prev.next = new_node
+		new_node.prev = prev
+
+	def prepend_node(self, key):
+		"""Prepend a node to the beginning of the list"""
+		new_node = DoublyLinkedNode(key)
+		if not self.root:
+			self.root = new_node
+			return
+		old_root = self.root
+		new_node.next = old_root
+		old_root.prev = new_node
+		self.root = new_node
+
+	def delete_node(self, key):
+		"""Delete the node indicated by *key* and return it or None if doesn't exist"""
+		if not self.root:
+			return None
+		curr = self.root
+		prev = None
+		while curr and curr.key != key:
+			prev = curr
+			curr = curr.next
+		if not curr:
+			return None
+		if prev:
+			prev.next = curr.next
+		else:
+			self.root = curr.next
+		if curr.next:
+			curr.next.prev = prev
+		return curr
+
+	def reverse(self):
+		"""Reverse the contents of a doubly linked list"""
+		curr = self.root
+		prev = None
+		while curr:
+			old_next = curr.next
+			curr.prev = old_next
+			curr.next = prev
+			prev = curr
+			curr = old_next
+		self.root = prev
 
 class Node(object):
 	"""Basic implementation of a node on a singly linked list"""
 
+	next = None
+
 	def __init__(self, key):
 		self.key = key
-		self.next = None
+
+
+class DoublyLinkedNode(Node):
+	"""Basic implementation of a doubly linked list node"""
+
+	prev = None
 
 
 def main():
@@ -78,9 +158,36 @@ def main():
 	link_list.prepend_node(10)
 	link_list.prepend_node(8)
 	link_list.print_list()
+	link_list.reverse()
+	link_list.print_list()
 	link_list.delete_node(8)
 	link_list.print_list()
 	print link_list.find_node(3).key
+	link_list.delete_node(2)
+	link_list.print_list()
+	link_list.delete_node(6)
+	link_list.print_list()
+	print "\n\n\n\n"
+	d_ll = DoublyLinkedList()
+	d_ll.append_node(6)
+	d_ll.append_node(8)
+	d_ll.prepend_node(2)
+	d_ll.prepend_node(7)
+	d_ll.append_node(19)
+	d_ll.print_list()
+	d_ll.reverse()
+	d_ll.print_list()
+	d_ll.delete_node(7)
+	d_ll.print_list()
+	d_ll.delete_node(2)
+	d_ll.print_list()
+	d_ll.delete_node(19)
+	d_ll.print_list()
+	d_ll.delete_node(6)
+	d_ll.print_list()
+	d_ll.delete_node(8)
+	d_ll.print_list()
+
 
 if __name__ == "__main__":
 	main()
